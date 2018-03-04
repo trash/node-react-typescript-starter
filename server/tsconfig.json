@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "es6",
+        "module": "node",
+        "pretty": true,
+        "outDir": "build",
+        "rootDir": "src",
+        "sourceRoot": "src",
+        "listFiles": true,
+        "strictNullChecks": true
+    },
+    "exclude": [
+        "app/bower_components",
+        "node_modules",
+        "app/src/vendor",
+        "lib"
+    ]
+}
