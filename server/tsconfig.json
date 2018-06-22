@@ -1,19 +1,23 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "target": "es6",
-        "module": "node",
+        "target": "es2017",
         "pretty": true,
         "outDir": "build",
-        "rootDir": "src",
-        "sourceRoot": "src",
+        // "rootDir": "",
+        // "sourceRoot": "lib",
         "listFiles": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "moduleResolution": "node",
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true
     },
     "exclude": [
         "app/bower_components",
         "node_modules",
         "app/src/vendor",
-        "lib"
+    ],
+    "files": [
+        "server.ts"
     ]
 }

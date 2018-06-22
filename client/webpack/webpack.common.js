@@ -5,6 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // We need this plugin to detect a `--watch` mode. It may be removed later
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
 const { CheckerPlugin } = require('awesome-typescript-loader');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ENV = process.env.NODE_ENV;
+const extractLess = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: ENV === "development"
+});
 
 module.exports = {
     entry: {
@@ -16,14 +22,25 @@ module.exports = {
             'react-dom'
         ],
     },
+    optimization: {
+        splitChunks: {
+            chunks: "all"
+        }
+    },
     plugins: [
+        extractLess,
         // new webpack.optimize.CommonsChunkPlugin({
         //     name: ['app', 'vendor']
         // }),
-        new HtmlWebpackPlugin({
-            template: 'index.html'
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify(ENV)
+            }
         }),
-        new CheckerPlugin()
+        new HtmlWebpackPlugin({
+            template: './index.html'
+        }),
+        new CheckerPlugin(),
 
     ],
     resolve: {
@@ -35,7 +52,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 exclude: ['node_modules'],
-                loader: 'awesome-typescript-loader'
+                loader: 'ts-loader'
             },
             {
                 test: /.jsx?$/,
@@ -44,11 +61,23 @@ module.exports = {
                 query: {
                     presets: ['preset-env', 'react']
                 }
-            }
+            },
+            {
+                test: /\.less$/,
+                use: extractLess.extract({
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "less-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
+            },
         ]
     },
     devServer: {
         historyApiFallback: true,
-        port: 9000
+        port: 8998
     }
 }

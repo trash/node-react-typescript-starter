@@ -2,23 +2,31 @@ import * as _ from 'lodash';
 import * as Immutable from 'immutable';
 import {createStore} from 'redux';
 
-// import * as actionTypes from './actions/types';
-// import {
-//     UpdateTab
-// } from './actions';
+import * as actionTypes from './actions/types';
+import {
+    AddNote,
+    DeleteNote,
+    UpdateNote,
+    UpdateNotes
+} from './actions';
 
-// import {Tab} from '../models/common';
+import {Note} from '../models/note';
 
 type ReducerAction =
-    // UpdateTab
-    any
+    AddNote
+    | DeleteNote
+    | UpdateNote
+    | UpdateNotes
 ;
 
 export interface StoreState {
-    // tab: Tab;
+    notes: Immutable.List<Note>;
+    isAuthenticated: boolean;
 }
 
 const initialState: StoreState = {
+    notes: Immutable.List(),
+    isAuthenticated: false
 };
 
 function mainReducer(
@@ -28,9 +36,26 @@ function mainReducer(
     const newState = _.extend({}, previousState);
 
     switch (action.type) {
-        // case actionTypes.UPDATE_TAB:
-        //     newState.tab = action.tab;
-        //     break;
+        case actionTypes.ADD_NOTE:
+            newState.notes = previousState.notes.push(action.note);
+            break;
+        case actionTypes.DELETE_NOTE: {
+            const index = previousState.notes.findIndex(n => n.id === action.id);
+            newState.notes = previousState.notes.remove(index);
+            break;
+        }
+        case actionTypes.UPDATE_NOTE: {
+            const index = previousState.notes.findIndex(n => n.id === action.id);
+            newState.notes = previousState.notes.update(index, (n) => {
+                return Object.assign({}, n, {
+                    note: action.note
+                })
+            });
+            break;
+        }
+        case actionTypes.UPDATE_NOTES:
+            newState.notes = Immutable.List(action.notes);
+            break;
     }
 
     return newState;
