@@ -10,6 +10,9 @@ A good starter setup for working with node on the server with ts support and rea
     - Go in the server directory: `$ cd server`
     - Run all the migrations: `$ knex migrate:latest`
     - *This will populate a database with one user and one note*
+3. Install node packages
+    - `$ yarn`
+    - *...Or I guess `$ npm install`...though if stuff breaks don't look at me*
 3. Start up the node server and the webpack dev server
     - `$ npm run dev`
     - *This will start everything in watch mode so that if you make a change to a server file or a frontend file, the appropriate program will restart itself with the latest changes.*
